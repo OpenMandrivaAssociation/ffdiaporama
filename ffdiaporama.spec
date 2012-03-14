@@ -15,6 +15,7 @@ URL:		http://ffdiaporama.tuxfamily.org
 Source0:	http://ffdiaporama.tuxfamily.org/download.php?f=Stable/%{version}_%{year}%{date}/%{name}_%{version}.%{year}.%{date}.tar.gz
 BuildRequires:	qt4-devel
 BuildRequires:	ffmpeg-devel
+BuildRequires:	taglib-devel
 BuildRequires:	SDL-devel
 BuildRequires:	SDL_mixer-devel
 BuildRequires:	desktop-file-utils
