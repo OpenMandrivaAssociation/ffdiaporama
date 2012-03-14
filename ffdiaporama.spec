@@ -18,6 +18,7 @@ BuildRequires:	ffmpeg-devel
 BuildRequires:	SDL-devel
 BuildRequires:	SDL_mixer-devel
 BuildRequires:	desktop-file-utils
+BuildRequires:	pkgconfig(exiv2)
 Requires:	ffmpeg
 Requires:	exiv2
 
