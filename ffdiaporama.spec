@@ -2,17 +2,15 @@
 # heavy modifications
 
 %define		oname	ffDiaporama
-%define		year	2012
-%define		date	0305
 
 Name:		ffdiaporama
-Version:	1.2
+Version:	1.3
 Release:	%mkrel 1
 Summary:	A tool to create video sequences from images, titles, music
 License:	GPLv2
 Group:		Video
 URL:		http://ffdiaporama.tuxfamily.org
-Source0:	http://ffdiaporama.tuxfamily.org/download.php?f=Stable/%{version}_%{year}%{date}/%{name}_%{version}.%{year}.%{date}.tar.gz
+Source0:	http://ffdiaporama.tuxfamily.org/download.php?f=Archives/%{name}_%{version}.tar.gz
 BuildRequires:	qt4-devel
 BuildRequires:	ffmpeg-devel
 BuildRequires:	taglib-devel
@@ -57,15 +55,11 @@ Main features:
 %make
 
 %install
-%__rm -rf %{buildroot}
 %__make install INSTALL_ROOT=%{buildroot}
 desktop-file-install --vendor="" \
        --dir=%{buildroot}%{_datadir}/applications/ \
        --add-category="GTK"  \
        ffDiaporama.desktop
-
-%clean
-%__rm -rf %{buildroot}
 
 %files
 %doc licences.txt
@@ -73,4 +67,3 @@ desktop-file-install --vendor="" \
 %{_datadir}/%{oname}
 %{_datadir}/mime/packages/%{oname}-mime.xml
 %{_datadir}/applications/%{oname}.desktop
-
