@@ -4,7 +4,7 @@
 %define		oname	ffDiaporama
 
 Name:		ffdiaporama
-Version:	1.3
+Version:	1.3.1
 Release:	%mkrel 1
 Summary:	A tool to create video sequences from images, titles, music
 License:	GPLv2
