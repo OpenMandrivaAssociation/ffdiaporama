@@ -67,3 +67,24 @@ desktop-file-install --vendor="" \
 %{_datadir}/%{oname}
 %{_datadir}/mime/packages/%{oname}-mime.xml
 %{_datadir}/applications/%{oname}.desktop
+
+
+%changelog
+* Thu Sep 06 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 1.3.1-1mdv2012.0
++ Revision: 816418
+- update to 1.3.1
+
+* Wed Jul 04 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 1.3-1
++ Revision: 808097
+- update to 1.3
+
+* Wed Mar 14 2012 Andrey Bondrov <abondrov@mandriva.org> 1.2-1
++ Revision: 784935
+- Update BuildRequires
+- Update BuildRequires
+- New version 1.2
+
+* Sun Feb 26 2012 Andrey Bondrov <abondrov@mandriva.org> 1.1-1
++ Revision: 780874
+- imported package ffdiaporama
+
