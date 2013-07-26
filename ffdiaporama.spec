@@ -1,25 +1,31 @@
 # This spec is based on Alberto Altieri's work in MIB with
 # heavy modifications
-
+# debuginfo-without-sources
+%define debug_package	%{nil}
 %define		oname	ffDiaporama
 
 Name:		ffdiaporama
-Version:	1.3.1
-Release:	%mkrel 1
+Version:	1.6
+Release:	1
 Summary:	A tool to create video sequences from images, titles, music
 License:	GPLv2
 Group:		Video
 URL:		http://ffdiaporama.tuxfamily.org
-Source0:	http://ffdiaporama.tuxfamily.org/download.php?f=Archives/%{name}_%{version}.tar.gz
+Source0:	http://download.tuxfamily.org/ffdiaporama/Archives/ffdiaporama_1.6.tar.gz
+
 BuildRequires:	qt4-devel
 BuildRequires:	ffmpeg-devel
-BuildRequires:	taglib-devel
-BuildRequires:	SDL-devel
-BuildRequires:	SDL_mixer-devel
+BuildRequires:	pkgconfig(taglib)
+BuildRequires:	pkgconfig(sdl)
+BuildRequires:	pkgconfig(SDL_mixer)
 BuildRequires:	desktop-file-utils
 BuildRequires:	pkgconfig(exiv2)
+BuildRequires:	pkgconfig(qimageblitz)
+
 Requires:	ffmpeg
 Requires:	exiv2
+Requires:	qt4-common
+
 
 %description
 ffDiaporama is an application of creation of videos sequences established by
@@ -43,48 +49,43 @@ Main features:
   effects of volume, fade in/out and passage in pause, sequence by
   sequence.
 * Generation of usable videos by most of the current videos equipments
-  (DVD player/smartphone, multimedia box, hard drive, etc.) but also
+  (DVD player/smart-phone, multimedia box, hard drive, etc.) but also
   publishable on the main video sharing Web sites (YouTube, Dailymotion,
   etc.)
 
 %prep
 %setup -q -c
+chmod -x licence.rtf licences.txt
+find background -name '*.txt' -exec chmod -x {} \;
+find locale -name '*.ts' -exec chmod -x {} \;
+find luma  -name '*.txt' -exec chmod -x {} \;
 
 %build
-%qmake_qt4 %{oname}.pro
+%qmake_qt4 PREFIX=/usr %{oname}.pro 
 %make
 
 %install
-%__make install INSTALL_ROOT=%{buildroot}
+%makeinstall INSTALL_ROOT=$RPM_BUILD_ROOT
 desktop-file-install --vendor="" \
        --dir=%{buildroot}%{_datadir}/applications/ \
        --add-category="GTK"  \
        ffDiaporama.desktop
 
+# fix attr
+chmod -x %{buildroot}%{_datadir}/mime/packages/ffDiaporama-mime.xml
+find %{buildroot}%{_datadir}/ffDiaporama -name '*.xml' -exec chmod -x {} \;
+find %{buildroot}%{_datadir}/ffDiaporama -name '*.txt' -exec chmod -x {} \;
+find %{buildroot}%{_datadir}/ffDiaporama -name '*ffpreset' -exec chmod -x {} \;
+
+
+
 %files
-%doc licences.txt
+%doc licences.txt licence.rtf 
 %{_bindir}/%{oname}
 %{_datadir}/%{oname}
 %{_datadir}/mime/packages/%{oname}-mime.xml
 %{_datadir}/applications/%{oname}.desktop
+%{_datadir}/icons/hicolor/*/apps/ffdiaporama.png
 
 
-%changelog
-* Thu Sep 06 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 1.3.1-1mdv2012.0
-+ Revision: 816418
-- update to 1.3.1
-
-* Wed Jul 04 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 1.3-1
-+ Revision: 808097
-- update to 1.3
-
-* Wed Mar 14 2012 Andrey Bondrov <abondrov@mandriva.org> 1.2-1
-+ Revision: 784935
-- Update BuildRequires
-- Update BuildRequires
-- New version 1.2
-
-* Sun Feb 26 2012 Andrey Bondrov <abondrov@mandriva.org> 1.1-1
-+ Revision: 780874
-- imported package ffdiaporama
 
