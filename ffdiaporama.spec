@@ -5,13 +5,13 @@
 %define		oname	ffDiaporama
 
 Name:		ffdiaporama
-Version:	1.6
+Version:	2.0.1
 Release:	1
 Summary:	A tool to create video sequences from images, titles, music
 License:	GPLv2
 Group:		Video
 URL:		http://ffdiaporama.tuxfamily.org
-Source0:	http://download.tuxfamily.org/ffdiaporama/Archives/ffdiaporama_1.6.tar.gz
+Source0:	http://download.tuxfamily.org/ffdiaporama/Archives/ffdiaporama_2.0.1.tar.gz
 
 BuildRequires:	qt4-devel
 BuildRequires:	ffmpeg-devel
@@ -65,7 +65,7 @@ find luma  -name '*.txt' -exec chmod -x {} \;
 %make
 
 %install
-%makeinstall INSTALL_ROOT=$RPM_BUILD_ROOT
+%makeinstall INSTALL_ROOT=%{buildroot}
 desktop-file-install --vendor="" \
        --dir=%{buildroot}%{_datadir}/applications/ \
        --add-category="GTK"  \
@@ -86,6 +86,7 @@ find %{buildroot}%{_datadir}/ffDiaporama -name '*ffpreset' -exec chmod -x {} \;
 %{_datadir}/mime/packages/%{oname}-mime.xml
 %{_datadir}/applications/%{oname}.desktop
 %{_datadir}/icons/hicolor/*/apps/ffdiaporama.png
+
 
 
 
