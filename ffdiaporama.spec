@@ -1,92 +1,101 @@
-# This spec is based on Alberto Altieri's work in MIB with
-# heavy modifications
-# debuginfo-without-sources
 %define debug_package	%{nil}
-%define		oname	ffDiaporama
+%define oname   ffDiaporama
+Name:           ffdiaporama
+Version:        2.2
+Release:        0.1
+Summary:        Movie creator from photos and video clips
+License:        GPLv2
+URL:            http://ffdiaporama.tuxfamily.org
+Group:          Video
+# this is devel version
+Source:         http://download.tuxfamily.org/%{name}/Packages/Stable/%{name}-2014.07.01.tar.gz
 
-Name:		ffdiaporama
-Version:	2.0.1
-Release:	1
-Summary:	A tool to create video sequences from images, titles, music
-License:	GPLv2
-Group:		Video
-URL:		http://ffdiaporama.tuxfamily.org
-Source0:	http://download.tuxfamily.org/ffdiaporama/Archives/ffdiaporama_2.0.1.tar.gz
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  desktop-file-utils
+BuildRequires:  pkgconfig(exiv2)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Help)
+BuildRequires:  pkgconfig(Qt5Xml)
+BuildRequires:  pkgconfig(Qt5Concurrent)
+BuildRequires:  qt5-macros
+BuildRequires:  qmake5
 
-BuildRequires:	qt4-devel
-BuildRequires:	ffmpeg-devel
-BuildRequires:	pkgconfig(taglib)
-BuildRequires:	pkgconfig(sdl)
-BuildRequires:	pkgconfig(SDL_mixer)
-BuildRequires:	desktop-file-utils
-BuildRequires:	pkgconfig(exiv2)
-BuildRequires:	pkgconfig(qimageblitz)
 
-Requires:	ffmpeg
-Requires:	exiv2
-Requires:	qt4-common
 
+Requires:       ffmpeg
+Requires:       qt5-database-plugin-sqlite
+Suggests:       ffdiaporama-texturemate
+Suggests:       ffdiaporama-openclipart
 
 %description
-ffDiaporama is an application of creation of videos sequences established by
-titles, images, photos, movie clip and music.
+ffDiaporama is an application for creating video sequences consisting of
+* titles, fixed or animated.
+* images or photos, fixed or animated.
+* movie clips
+* music
 
-These sequences are assembled in slide show by means of transitions of
-sequence to produce complete videos
+These sequences are assembled into a slide show by means of transitions
+to produce complete videos
+The following options are available:
 
-Main features:
-* Refocused of images and photos and refocused and cutting of video clips
-* Note (addition of text) for images, photos, sequences and animations
-* Graphic filters on the images and the videos (passage in black and
-  white, dust removal, equalization of colors, etc.)
-* Creation of animation by zoom, rotation or Ken Burns Effect on part of
+* Reframing of images and photos
+* Cutting of video clips
+* Adding text, notes to images, photos, sequences and animations
+* Graphical filters on the images and the videos (conversion into
+  black and white, dust removal, equalization of colors, etc.)
+* Creation of animation by zoom, rotation or Ken Burns Effect on
   images or photos
-* Correction of the images and the videos during the animations
+* Correction of the images and the videos during animations
   (luminosity, contrast, gamma, colors, etc.)
-* Transitions between sequence with definition of the transition type,
+* Transitions between sequences with definition of the transition type,
   sequence by sequence.
 * Addition of a background sound (wav, mp3 or ogg) with customizable
-  effects of volume, fade in/out and passage in pause, sequence by
-  sequence.
-* Generation of usable videos by most of the current videos equipments
-  (DVD player/smart-phone, multimedia box, hard drive, etc.) but also
-  publishable on the main video sharing Web sites (YouTube, Dailymotion,
-  etc.)
+  effects for volume, fade in/out and passage in pause, sequence by sequence.
+* Generation of videos usable on most current video equipment
+  (DVD player/smartphone, multimedia box, hard drive, etc.)
+  but also publishable on the main video-sharing Websites
+  (YouTube, Dailymotion, etc.)
+* Video formats from QVGA (320×240) to Full HD (1920×1080)
+  by way of the DVD and HD 720 formats.
+* Image geometry (aspect ratio) : 4:3, 16:9 or 2.35:1 (cinema)
+* Possible formats for rendering : avi, mpg, mp4, webm, mkv
 
 %prep
-%setup -q -c
-chmod -x licence.rtf licences.txt
-find background -name '*.txt' -exec chmod -x {} \;
-find locale -name '*.ts' -exec chmod -x {} \;
-find luma  -name '*.txt' -exec chmod -x {} \;
+%setup -q -n %{oname}
+perl -pi -e "s|Categories=GTK;GNOME;Qt;KDE;AudioVideo|Categories=GTK;GNOME;Qt;KDE;AudioVideo;|" ffDiaporama.desktop
+
+chmod -x authors.txt BUILDVERSION.txt changelog-en.txt changelog-fr.txt licences.txt \
+  readme.txt licence.rtf ffDiaporama.xml ffDiaporama.desktop Devices.xml ffDiaporama-mime.xml \
+  locale/LOCALEVERSION.TXT locale/WIKIVERSION.TXT
+
 
 %build
-%qmake_qt4 PREFIX=/usr %{oname}.pro 
+%qmake_qt5 %{oname}.pro
 %make
 
 %install
 %makeinstall INSTALL_ROOT=%{buildroot}
-desktop-file-install --vendor="" \
-       --dir=%{buildroot}%{_datadir}/applications/ \
-       --add-category="GTK"  \
-       ffDiaporama.desktop
+mkdir -p %{buildroot}%{_datadir}%{oname}/locale
+install locale/*  %{buildroot}%{_datadir}/%{oname}/locale/
 
-# fix attr
-chmod -x %{buildroot}%{_datadir}/mime/packages/ffDiaporama-mime.xml
-find %{buildroot}%{_datadir}/ffDiaporama -name '*.xml' -exec chmod -x {} \;
-find %{buildroot}%{_datadir}/ffDiaporama -name '*.txt' -exec chmod -x {} \;
-find %{buildroot}%{_datadir}/ffDiaporama -name '*ffpreset' -exec chmod -x {} \;
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{oname}.desktop
 
+(cd %{buildroot} && find . -name '*.q*') | sed -e 's|^.||' | sed -e \
+    's:\(.*/locale/\)\([_a-z_A-Z]\+\)\(.q\):%lang(\2) \1\2\3:' >> %{name}.lang
+    
+find %{buildroot}%{_datadir}/%{oname}/locale  -name '*.ts' -exec chmod -x {} \;
 
+%files -f %{name}.lang
+%doc authors.txt BUILDVERSION.txt changelog-en.txt changelog-fr.txt licences.txt readme.txt licence.rtf ffDiaporama.xml Devices.xml
+%{_datadir}/%{oname}/*.txt
+%{_datadir}/%{oname}/*.xml
+%{_datadir}/%{oname}/*.rtf
+%{_datadir}/%{oname}/locale/*.TXT
+%{_datadir}/%{oname}/locale/*.ts
 
-%files
-%doc licences.txt licence.rtf 
 %{_bindir}/%{oname}
-%{_datadir}/%{oname}
-%{_datadir}/mime/packages/%{oname}-mime.xml
 %{_datadir}/applications/%{oname}.desktop
-%{_datadir}/icons/hicolor/*/apps/ffdiaporama.png
-
-
-
-
+%{_datadir}/mime/packages/%{oname}-mime.xml
+%{_iconsdir}/hicolor/*/apps/%{name}.png
