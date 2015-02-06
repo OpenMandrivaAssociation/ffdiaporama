@@ -2,7 +2,7 @@
 %define oname   ffDiaporama
 Name:           ffdiaporama
 Version:        2.2
-Release:        0.1
+Release:        0.2
 Summary:        Movie creator from photos and video clips
 License:        GPLv2
 URL:            http://ffdiaporama.tuxfamily.org
