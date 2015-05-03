@@ -1,33 +1,34 @@
-%define debug_package	%{nil}
+%define debug_package %{nil}
 %define oname   ffDiaporama
-Name:           ffdiaporama
-Version:        2.2
-Release:        0.2
-Summary:        Movie creator from photos and video clips
-License:        GPLv2
-URL:            http://ffdiaporama.tuxfamily.org
-Group:          Video
+
+Summary:	Movie creator from photos and video clips
+Name:		ffdiaporama
+Version:	2.2
+Release:	0.3
+License:	GPLv2+
+Group:		Video
+Url:		http://ffdiaporama.tuxfamily.org
 # this is devel version
-Source:         http://download.tuxfamily.org/%{name}/Packages/Stable/%{name}-2014.07.01.tar.gz
-
-BuildRequires:  pkgconfig(Qt5Core)
-BuildRequires:  pkgconfig(libavcodec) >= 2.5.4
-BuildRequires:  pkgconfig(Qt5Multimedia)
-BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig(exiv2)
-BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Help)
-BuildRequires:  pkgconfig(Qt5Xml)
-BuildRequires:  pkgconfig(Qt5Concurrent)
-BuildRequires:  qt5-macros
-BuildRequires:  qmake5
-
-
-
-Requires:       ffmpeg
-Requires:       qt5-database-plugin-sqlite
-Suggests:       ffdiaporama-texturemate
-Suggests:       ffdiaporama-openclipart
+Source0:	http://download.tuxfamily.org/%{name}/Packages/Stable/%{name}-2014.07.01.tar.gz
+Patch0:		ffdiaporama-ffmpeg-2.4.patch
+Patch1:		ffdiaporama-audiodecode.patch
+Patch2:		ffdiaporama-nodownload.patch
+Patch3:		ffdiaporama-workingdir.patch
+BuildRequires:	desktop-file-utils
+BuildRequires:	qmake5
+BuildRequires:	qt5-macros
+BuildRequires:	pkgconfig(exiv2)
+BuildRequires:	pkgconfig(libavcodec)
+BuildRequires:	pkgconfig(Qt5Concurrent)
+BuildRequires:	pkgconfig(Qt5Core)
+BuildRequires:	pkgconfig(Qt5Help)
+BuildRequires:	pkgconfig(Qt5Multimedia)
+BuildRequires:	pkgconfig(Qt5Svg)
+BuildRequires:	pkgconfig(Qt5Xml)
+Requires:	ffmpeg
+Requires:	qt5-database-plugin-sqlite
+Suggests:	ffdiaporama-openclipart
+Suggests:	ffdiaporama-texturemate
 
 %description
 ffDiaporama is an application for creating video sequences consisting of
@@ -62,14 +63,32 @@ The following options are available:
 * Image geometry (aspect ratio) : 4:3, 16:9 or 2.35:1 (cinema)
 * Possible formats for rendering : avi, mpg, mp4, webm, mkv
 
+%files -f %{name}.lang
+%doc authors.txt BUILDVERSION.txt changelog-en.txt changelog-fr.txt licences.txt readme.txt licence.rtf ffDiaporama.xml Devices.xml
+%{_datadir}/%{oname}/*.txt
+%{_datadir}/%{oname}/*.xml
+%{_datadir}/%{oname}/*.rtf
+%{_datadir}/%{oname}/locale/*.TXT
+%{_datadir}/%{oname}/locale/*.ts
+%{_bindir}/%{oname}
+%{_datadir}/applications/%{oname}.desktop
+%{_datadir}/mime/packages/%{oname}-mime.xml
+%{_iconsdir}/hicolor/*/apps/%{name}.png
+
+#----------------------------------------------------------------------------
+
 %prep
-%setup -q -n %{oname}
+%setup -qn %{oname}
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+
 perl -pi -e "s|Categories=GTK;GNOME;Qt;KDE;AudioVideo|Categories=GTK;GNOME;Qt;KDE;AudioVideo;|" ffDiaporama.desktop
 
 chmod -x authors.txt BUILDVERSION.txt changelog-en.txt changelog-fr.txt licences.txt \
   readme.txt licence.rtf ffDiaporama.xml ffDiaporama.desktop Devices.xml ffDiaporama-mime.xml \
   locale/LOCALEVERSION.TXT locale/WIKIVERSION.TXT
-
 
 %build
 %qmake_qt5 %{oname}.pro
@@ -84,18 +103,6 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{oname}.desktop
 
 (cd %{buildroot} && find . -name '*.q*') | sed -e 's|^.||' | sed -e \
     's:\(.*/locale/\)\([_a-z_A-Z]\+\)\(.q\):%lang(\2) \1\2\3:' >> %{name}.lang
-    
+
 find %{buildroot}%{_datadir}/%{oname}/locale  -name '*.ts' -exec chmod -x {} \;
 
-%files -f %{name}.lang
-%doc authors.txt BUILDVERSION.txt changelog-en.txt changelog-fr.txt licences.txt readme.txt licence.rtf ffDiaporama.xml Devices.xml
-%{_datadir}/%{oname}/*.txt
-%{_datadir}/%{oname}/*.xml
-%{_datadir}/%{oname}/*.rtf
-%{_datadir}/%{oname}/locale/*.TXT
-%{_datadir}/%{oname}/locale/*.ts
-
-%{_bindir}/%{oname}
-%{_datadir}/applications/%{oname}.desktop
-%{_datadir}/mime/packages/%{oname}-mime.xml
-%{_iconsdir}/hicolor/*/apps/%{name}.png

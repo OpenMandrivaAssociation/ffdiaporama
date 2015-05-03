@@ -1,0 +1,20 @@
+diff -up ffDiaporama/src/ffDiaporama/main.cpp.workingdir ffDiaporama/src/ffDiaporama/main.cpp
+--- ffDiaporama/src/ffDiaporama/main.cpp.workingdir	2014-04-24 10:22:03.000000000 +0200
++++ ffDiaporama/src/ffDiaporama/main.cpp	2014-11-16 05:10:39.121823340 +0100
+@@ -63,14 +63,8 @@ bool SetWorkingPath(char * const argv[],
+ 
+     QString FileToTest="BUILDVERSION.txt";
+ 
+-    if (!CheckFolder(FileToTest,QDir::currentPath())
+-        &&(!CheckFolder(FileToTest,QString("..")+QDir().separator()+QString("..")+QDir().separator()+QString("..")+QDir().separator()+QString("..")+QDir().separator()+ApplicationName))
+-        &&(!CheckFolder(FileToTest,QString("..")+QDir().separator()+QString("..")+QDir().separator()+QString("..")+QDir().separator()+ApplicationName))
+-        #if defined(Q_OS_LINUX) || defined(Q_OS_SOLARIS)
+-            &&(!CheckFolder(FileToTest,"/opt/share/"+ApplicationName))
+-            &&(!CheckFolder(FileToTest,"/usr/share/"+ApplicationName))
+-        #endif
+-       ) {
++    if (!CheckFolder(FileToTest,"/usr/share/"+ApplicationName))
++    {
+         ToLog(LOGMSG_INFORMATION,QString("Critical error : Impossible to find application directory"));
+         exit(1);
+     }

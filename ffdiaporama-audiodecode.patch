@@ -1,0 +1,17 @@
+diff -up ffDiaporama/src/ffDiaporama/engine/cBaseMediaFile.cpp.audiodecode ffDiaporama/src/ffDiaporama/engine/cBaseMediaFile.cpp
+--- ffDiaporama/src/ffDiaporama/engine/cBaseMediaFile.cpp.audiodecode	2014-06-26 06:54:45.000000000 +0200
++++ ffDiaporama/src/ffDiaporama/engine/cBaseMediaFile.cpp	2014-11-15 03:00:05.347961066 +0100
+@@ -3657,11 +3657,8 @@ void cVideoFile::DecodeAudio(sAudioConte
+                 PacketTemp.size-=Len;
+ 
+             } else {
+-                AudioContext->Counter--;
+-                if (AudioContext->Counter==0) {
+-                    Len=0;
+-                    ToLog(LOGMSG_CRITICAL,QString("Impossible to decode audio frame: Discard it"));
+-                }
++                PacketTemp.data+=Len;
++                PacketTemp.size-=Len;
+             }
+             if (Frame!=NULL) FREEFRAME(&Frame);
+         }
