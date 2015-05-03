@@ -18,7 +18,7 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	qmake5
 BuildRequires:	qt5-macros
 BuildRequires:	pkgconfig(exiv2)
-BuildRequires:	pkgconfig(libavcodec)
+BuildRequires:	pkgconfig(libavcodec) >= 2.5.4
 BuildRequires:	pkgconfig(Qt5Concurrent)
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Help)
