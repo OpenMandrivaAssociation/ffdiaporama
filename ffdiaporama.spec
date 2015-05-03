@@ -2,7 +2,7 @@
 %define oname   ffDiaporama
 Name:           ffdiaporama
 Version:        2.2
-Release:        0.1
+Release:        0.2
 Summary:        Movie creator from photos and video clips
 License:        GPLv2
 URL:            http://ffdiaporama.tuxfamily.org
@@ -11,7 +11,7 @@ Group:          Video
 Source:         http://download.tuxfamily.org/%{name}/Packages/Stable/%{name}-2014.07.01.tar.gz
 
 BuildRequires:  pkgconfig(Qt5Core)
-BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libavcodec) >= 2.5.4
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(exiv2)
